@@ -2,7 +2,7 @@ name: Generate Document and Commit
 on:
   push:
     branches:
-      - develop
+      - master
 jobs:
   update-docs:
     name: Update Documents
