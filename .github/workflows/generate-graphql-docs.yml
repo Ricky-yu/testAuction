@@ -1,0 +1,21 @@
+name: Generate Document and Commit
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  update-docs:
+    name: Update Documents
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: Push Generated GraphQL Document Current Branch
+        uses: Code-Hex/gqldoc-actions@v1.0.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          schema: lib/src/data/graphql/types/schema.graphql
+          output: doc/graphql/clinicfor
