@@ -12,6 +12,11 @@ jobs:
     if: github.event.pull_request.merged == true
     steps:
        - uses: actions/checkout@v2
+       # 前回のりリースタグを取得する
+       - name: Get previous tag
+         id: pre_tag
+         run: |
+          echo "PRE_TAG=$(curl -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)" >> $GITHUB_ENV
        # タグを作成する
        - name: create tag
          id: create_tag
@@ -27,7 +32,6 @@ jobs:
          with:
           tag_name: ${{ env.TAG_NAME }}
           release_name: ${{ env.TAG_NAME }}
-          body: ${{ github.event.pull_request.body }}
+          body: ${{ env.PRE_TAG }}
           draft: false
           prerelease: false
-      
