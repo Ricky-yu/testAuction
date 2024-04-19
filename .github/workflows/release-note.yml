@@ -35,4 +35,3 @@ jobs:
           body: ${{ env.PRE_TAG }}
           draft: false
           prerelease: false
-       
