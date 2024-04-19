@@ -1,14 +1,12 @@
 name: Create release tag and release note.
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: [ main ]
 jobs:
   create-release-tag:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    if: github.event.pull_request.merged == true
     steps:
        - uses: actions/checkout@v2
        # タグを作成する
