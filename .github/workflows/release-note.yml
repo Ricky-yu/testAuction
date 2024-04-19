@@ -8,9 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-     - uses: actions/checkout@v2
-     - run: git fetch origin ${{ github.event.pull_request.head.ref }}
-     - run: git checkout ${{ github.event.pull_request.head.ref }}
-     - run: git tag `echo '${{ github.event.pull_request.head.ref }}' | sed 's/release\///'`
-     - run: git push origin `echo '${{ github.event.pull_request.head.ref }}' | sed 's/release\///'`
+       - uses: actions/checkout@v2
+       # タグを作成する
+       - name: create tag
+         id: create_tag
+         run: |
+           TAG_NAME="${{ github.ref }}"
+           echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+       # リリースノート作成
+       - name: Create release note
+         id: release
+         uses: actions/create-release@v1
+         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.TAG_NAME }}
+          body: ${{ github.event.pull_request.body }}
+          draft: false
+          prerelease: false
       
