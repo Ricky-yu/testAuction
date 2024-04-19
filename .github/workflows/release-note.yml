@@ -8,11 +8,7 @@ jobs:
   create-release-tag:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TZ: "Asia/Tokyo"
-
+    if: github.event.pull_request.merged == true
     steps:
        - uses: actions/checkout@v2
        # タグを作成する
